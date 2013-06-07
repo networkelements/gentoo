@@ -20,3 +20,7 @@
 #/dev/SWAP              none            swap            sw              0 0
 /dev/cdrom              /mnt/cdrom      auto            noauto,ro       0 0
 #/dev/fd0               /mnt/floppy     auto            noauto          0 0
+/dev/zram0              swap                    swap            pri=16383                                                       0 0
+/dev/zram1              swap                    swap            pri=16383                                                       0 0
+/dev/zram2              /tmp                    ext4            defaults                                                        0 0
+/dev/zram3              /tmp                    ext4            defaults                                                        0 0
