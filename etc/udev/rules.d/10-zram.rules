@@ -1,0 +1,4 @@
+KERNEL=="zram0", SUBSYSTEM=="block", DRIVER=="", ACTION="add", ATTR{disksize}=="0", ATTR{disksize}="512", RUN{program}+="mkswap %N"
+KERNEL=="zram1", SUBSYSTEM=="block", DRIVER=="", ACTION="add", ATTR{disksize}=="0", ATTR{disksize}="512", RUN{program}+="mkswap %N"
+KERNEL=="zram2", SUBSYSTEM=="block", DRIVER=="", ACTION="add", ATTR{disksize}=="0", ATTR{disksize}="512", RUN{program}+="mkfs.ext4 %N"
+KERNEL=="zram3", SUBSYSTEM=="block", DRIVER=="", ACTION="add", ATTR{disksize}=="0", ATTR{disksize}="512", RUN{program}+="mkfs.ext4 %N"
