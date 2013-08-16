@@ -14,13 +14,15 @@
 # <fs>                  <mountpoint>    <type>          <opts>          <dump/pass>
 
 # NOTE: If your BOOT partition is ReiserFS, add the notail option to opts.
-/dev/sda1               /boot           ext2            noauto,noatime  1 2
-/dev/sda2               /               ext4            noatime         0 1
-/dev/sda3               /home           btrfs           noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
-#/dev/SWAP              none            swap            sw              0 0
-/dev/cdrom              /mnt/cdrom      auto            noauto,ro       0 0
-#/dev/fd0               /mnt/floppy     auto            noauto          0 0
-/dev/zram0              swap                    swap            pri=16383                                                       0 0
-/dev/zram1              swap                    swap            pri=16383                                                       0 0
-/dev/zram2              /tmp                    ext4            defaults                                                        0 0
-/dev/zram3              /tmp                    ext4            defaults                                                        0 0
+#/dev/sda1:  TYPE="ext2" 
+UUID="90393813-8f50-475f-8fe1-6243f0f11bcd"	/boot	ext2	noauto,noatime  1 2
+
+#/dev/sda2: TYPE="ext4" 
+UUID="a7104089-56c1-4993-a951-627f59e6fd80"	/	ext4	noatime         0 1
+
+#/dev/sda3: UUID_SUB="c4ef2f88-67f1-476e-9882-f36e54d4d75b" TYPE="btrfs" 
+UUID="dbf0ce6a-7139-49de-ad14-ec38ab0537f7" 	/home btrfs	noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
+
+shm             /dev/shm        tmpfs     nodev,nosuid,noexec  0 0
+
+/dev/cdrom              /mnt/cdrom      auto            noauto,ro       0 0                                                    0 0
