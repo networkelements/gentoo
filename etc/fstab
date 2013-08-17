@@ -12,17 +12,17 @@
 #
 
 # <fs>                  <mountpoint>    <type>          <opts>          <dump/pass>
-
 # NOTE: If your BOOT partition is ReiserFS, add the notail option to opts.
-#/dev/sda1:  TYPE="ext2" 
-UUID="90393813-8f50-475f-8fe1-6243f0f11bcd"	/boot	ext2	noauto,noatime  1 2
 
-#/dev/sda2: TYPE="ext4" 
-UUID="a7104089-56c1-4993-a951-627f59e6fd80"	/	ext4	noatime         0 1
+#/dev/sda1:  TYPE="ext2"	mount=/boot
+UUID="2d758ff5-6b70-4971-85c3-586c4721d954"	/boot	ext2	noauto,noatime  1 2
 
-#/dev/sda3: UUID_SUB="c4ef2f88-67f1-476e-9882-f36e54d4d75b" TYPE="btrfs" 
-UUID="dbf0ce6a-7139-49de-ad14-ec38ab0537f7" 	/home btrfs	noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
+#/dev/sda2: TYPE="ext4"	mount=/
+UUID="1a371b2e-ce5a-40ab-bff5-82f6c87dbb58"	/	ext4	noatime         0 1
+
+#/dev/sda3: UUID_SUB="0f1a0b34-596b-4c8d-aec7-f572221fda0e"	TYPE="btrfs"	mount=/home
+UUID="cec28d12-aba9-4919-a7e0-d1012440ce6e" 	/home btrfs	noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
 
 shm             /dev/shm        tmpfs     nodev,nosuid,noexec  0 0
 
-/dev/cdrom              /mnt/cdrom      auto            noauto,ro       0 0                                                    0 0
+/dev/cdrom              /mnt/cdrom      auto            noauto,ro       0 0
