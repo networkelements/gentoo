@@ -14,16 +14,17 @@
 # <fs>                  <mountpoint>    <type>          <opts>          <dump/pass>
 # NOTE: If your BOOT partition is ReiserFS, add the notail option to opts.
 
-#/dev/sda1:  TYPE="ext2"	mount=/boot
-UUID="b3232354-0999-49e8-9950-dde9edc74553"	/boot	ext2	noauto,noatime  1 2
+#/dev/sda1: UUID="e962b0aa-3070-49f4-8f53-c5d0025c09d2" TYPE="ext2" mount=/boot
+UUID="e962b0aa-3070-49f4-8f53-c5d0025c09d2"	/boot	ext2	noauto,noatime  1 2
 
-#/dev/sda2: TYPE="ext4"	mount=/
-UUID="169f9118-686c-46d5-a336-12e33bc393de"	/	ext4	noatime         0 1
+#/dev/sda2: UUID="ae14c3fe-5397-480a-8d76-f7321074ae97" TYPE="ext4" mount=/
+UUID="ae14c3fe-5397-480a-8d76-f7321074ae97" /	ext4	noatime         0 1
 
-#/dev/sda3: UUID_SUB="d804e045-2058-497c-81dd-a753105f4686"	TYPE="btrfs"	mount=/home
-UUID="b10bec01-7ffd-465d-8a33-de4248086061" /home btrfs	noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
+#/dev/sda3: UUID="fad75ba4-70c8-4534-b720-b21c276d3799" UUID_SUB="48625bf0-4b54-47c7-9a12-84dc24901bc3" TYPE="btrfs" mount=/home
+UUID="fad75ba4-70c8-4534-b720-b21c276d3799" /home btrfs	noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
 
-
+#/dev/sdc: UUID="bfc4c3a4-0a0a-4242-8af6-687cc524e945" UUID_SUB="1e313824-613b-47af-b9b6-e06e065f7c35" TYPE="btrfs" 
+#/dev/sdb: UUID="bfc4c3a4-0a0a-4242-8af6-687cc524e945" UUID_SUB="dd5224ff-51e6-47da-a59c-6dd316a9983a" TYPE="btrfs" 
 #Label: none  uuid: bfc4c3a4-0a0a-4242-8af6-687cc524e945
 #	Total devices 1 FS bytes used 24.00KB
 #	devid    1 size 2.73TB used 20.00MB path /dev/sdb
