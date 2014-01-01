@@ -29,7 +29,7 @@ UUID="b10bec01-7ffd-465d-8a33-de4248086061" /home btrfs	noatime,autodefrag,space
 #	devid    1 size 2.73TB used 20.00MB path /dev/sdb
 #	devid    2 size 2.73TB used 0.00 path /dev/sdc
 # mount=/data
-UUID="bfc4c3a4-0a0a-4242-8af6-687cc524e945" /home btrfs	noatime,space_cache,inode_cache,compress=lzo         0 2
+UUID="bfc4c3a4-0a0a-4242-8af6-687cc524e945" /data btrfs	noatime,space_cache,inode_cache,compress=lzo         0 2
 
 
 shm             /dev/shm        tmpfs     nodev,nosuid,noexec  0 0
