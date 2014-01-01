@@ -23,6 +23,15 @@ UUID="169f9118-686c-46d5-a336-12e33bc393de"	/	ext4	noatime         0 1
 #/dev/sda3: UUID_SUB="d804e045-2058-497c-81dd-a753105f4686"	TYPE="btrfs"	mount=/home
 UUID="b10bec01-7ffd-465d-8a33-de4248086061" /home btrfs	noatime,autodefrag,space_cache,inode_cache,compress=lzo         0 2
 
+
+#Label: none  uuid: bfc4c3a4-0a0a-4242-8af6-687cc524e945
+#	Total devices 1 FS bytes used 24.00KB
+#	devid    1 size 2.73TB used 20.00MB path /dev/sdb
+#	devid    2 size 2.73TB used 0.00 path /dev/sdc
+# mount=/data
+UUID="bfc4c3a4-0a0a-4242-8af6-687cc524e945" /home btrfs	noatime,space_cache,inode_cache,compress=lzo         0 2
+
+
 shm             /dev/shm        tmpfs     nodev,nosuid,noexec  0 0
 
 /dev/cdrom              /mnt/cdrom      auto            noauto,ro       0 0
