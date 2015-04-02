@@ -81,7 +81,7 @@ wget /* this page */
 
 sudo -i
 tmux
-apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk cryptsetup
+apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk cryptsetup lvm2
 script -a ~/gentooinstall_`date +%Y%d%m%H%M%S`.log
 
 ;;install痕、作業ログを少しだけ読みやすくする
@@ -89,23 +89,74 @@ script -a ~/gentooinstall_`date +%Y%d%m%H%M%S`.log
 
 date
 df -hT
-ls /dev/sd*
-gdisk /dev/sdc
-parted -l
-parted /dev/sdc print
- 
+
+
 ;;rm -rf /mnt/gentoo
- 
 mkdir /mnt/gentoo
 mkdir /mnt/gentoo/boot
 mkdir -p /mnt/gentoo/boot/
 mkdir -p /mnt/gentoo/home/
-mkfs.ext2 /dev/sdc1
-mkfs.ext4 /dev/sdc2
-mkfs.ext4 /dev/sdc3
-mount -t ext2 /dev/sdc1 /mnt/gentoo/boot
-mount -t ext4 /dev/sdc3 /mnt/gentoo/home/
-mount -t ext4 /dev/sdc2 /mnt/gentoo/
+
+
+ls /dev/sd*
+gdisk /dev/sdc
+//
+1.o
+y
+2.n
+3.1
+4.Enter
+5.500M
+6.Enter
+7.w
+y
+ 
+gdisk /dev/sdc
+//
+1.n
+2.2
+3.Enter
+4.Enter
+5.8302
+6.w
+y 
+
+;;
+cryptsetup open --type plain /dev/sdc2 container
+fdisk -l
+dd if=/dev/zero of=/dev/mapper/container
+
+;;
+cryptsetup luksFormat /dev/sdc2
+cryptsetup open --type luks /dev/sdc2 lvm
+pvcreate /dev/mapper/lvm
+vgcreate MyStorage /dev/mapper/lvm
+lvcreate -L 20G MyStorage -n rootvol
+lvcreate -l +100%FREE MyStorage -n homevol
+mkfs.ext4 /dev/mapper/MyStorage-rootvol
+mkfs.ext4 /dev/mapper/MyStorage-homevol
+
+mount /dev/MyStorage/rootvol /mnt/gentoo
+mount /dev/MyStorage/homevol /mnt/gentoo/home
+mkfs.ext4 /dev/sdc1
+mount -t ext4 /dev/sdc1 /mnt/gentoo/boot
+
+mkinitcpio の設定[編集]
+encrypt と lvm2 フックを mkinitcpio.conf 内の filesystems の前に追加します:
+/etc/mkinitcpio.conf
+HOOKS="... encrypt lvm2 ... filesystems ..."
+
+ブートローダーの設定[編集]
+In order unlock the encrypted root partition at boot, the following kernel parameters need to be set by the boot loader:
+cryptdevice=/dev/partition:MyStorage root=/dev/mapper/MyStorage-rootvol
+
+
+parted -l
+parted /dev/sdc print
+
+
+
+
 cd /mnt/gentoo/
 time wget http://ftp.iij.ad.jp/pub/linux/gentoo/snapshots/portage-latest.tar.bz2
 time wget http://ftp.iij.ad.jp/pub/linux/gentoo/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-20150326.tar.bz2
@@ -153,6 +204,8 @@ dispatch-conf
  
 time emerge -1tav linux-headers linux-firmware gentoo-sources emacs vim iptables pciutils syslog-ng fcron dhcpcd sudo zsh openssh man-pages-ja btrfs-progs f2fs-tools grub:2 efibootmgr dosfstools ufw gptfdisk tmux ntp
 
+
+time emerge -1tav lvm2
 time emerge -1tav emacs 
 time emerge -1tav flaggie
 time emerge -1tav iptables 
@@ -237,7 +290,10 @@ exit
 cat /mnt/gentoo/usr/src/linux/.config > /home/ubuntu/.config
 umount -l /mnt/gentoo{/dev{/shm,/pts},/sys,/boot,/proc,/}
  
- 
+;;
+dd if=/dev/zero of=/file/in/container
+rm /file/in/container
+
 exit
  
 poweroff
