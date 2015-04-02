@@ -81,10 +81,13 @@ wget /* this page */
 
 sudo -i
 tmux
-apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk
-script
+apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk cryptsetup
+script -a ~/gentooinstall_`date +%Y%d%m%H%M%S`.log
+
+;;install痕、作業ログを少しだけ読みやすくする
+;; col -bx <gentooinstall_`date +%Y%d%m%H%M%S`.log> `date +%Y%d%m%H%M%S`.txt
+
 date
- 
 df -hT
 ls /dev/sd*
 gdisk /dev/sdc
@@ -97,12 +100,12 @@ mkdir /mnt/gentoo
 mkdir /mnt/gentoo/boot
 mkdir -p /mnt/gentoo/boot/
 mkdir -p /mnt/gentoo/home/
-mkfs.ext2 /dev/sda1
-mkfs.ext4 /dev/sda2
-mkfs.ext4 /dev/sda3
-mount -t ext2 /dev/sda1 /mnt/gentoo/boot
-mount -t ext4 /dev/sda3 /mnt/gentoo/home/
-mount -t ext4 /dev/sda2 /mnt/gentoo/
+mkfs.ext2 /dev/sdc1
+mkfs.ext4 /dev/sdc2
+mkfs.ext4 /dev/sdc3
+mount -t ext2 /dev/sdc1 /mnt/gentoo/boot
+mount -t ext4 /dev/sdc3 /mnt/gentoo/home/
+mount -t ext4 /dev/sdc2 /mnt/gentoo/
 cd /mnt/gentoo/
 time wget http://ftp.iij.ad.jp/pub/linux/gentoo/snapshots/portage-latest.tar.bz2
 time wget http://ftp.iij.ad.jp/pub/linux/gentoo/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-20150326.tar.bz2
@@ -143,15 +146,31 @@ eselect profile set 1
 eselect profile list
  
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
-time emerge -1tav linux-headers linux-firmware gentoo-sources vim emacs iptables pciutils syslog-ng fcron dhcpcd sudo zsh openssh man-pages-ja btrfs-progs f2fs-tools grub:2 efibootmgr dosfstools ufw gptfdisk tmux ntp --autounmask-write
- 
-;; distcc  vim 
- 
+time emerge -1tav linux-headers linux-firmware gentoo-sources fish ntp --autounmask-write
+
 dispatch-conf
- 
 //  :u
  
 time emerge -1tav linux-headers linux-firmware gentoo-sources emacs vim iptables pciutils syslog-ng fcron dhcpcd sudo zsh openssh man-pages-ja btrfs-progs f2fs-tools grub:2 efibootmgr dosfstools ufw gptfdisk tmux ntp
+
+time emerge -1tav emacs 
+time emerge -1tav flaggie
+time emerge -1tav iptables 
+time emerge -1tav syslog-ng 
+time emerge -1tav fcron 
+time emerge -1tav dhcpcd 
+time emerge -1tav sudo
+time emerge -1tav openssh 
+time emerge -1tav man-pages-ja 
+time emerge -1tav btrfs-progs 
+time emerge -1tav f2fs-tools
+time emerge -1tav dosfstools 
+time emerge -1tav ufw 
+time emerge -1tav gptfdisk 
+time emerge -1tav tmux 
+time emerge -1tav eix
+time emerge -1tav pfl
+
 ============================================================================================================================================================
 ntpdate -s ntp.nict.jp
 hwclock -w
@@ -163,8 +182,8 @@ date
 cat /home/ubuntu/.config > /mnt/gentoo/usr/src/linux/.config
 ls -l /usr/src/linux
 cd /usr/src/linux
- 
-make localyesconfig
+
+;;make localmodconfig
 make menuconfig
  
 time make && time make modules_install
