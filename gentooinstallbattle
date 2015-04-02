@@ -1,0 +1,224 @@
+・使うやつ
+1.ubuntu japanese remixをUSBメモリに焼いてUSB boot
+2.キーボード
+3.トラックボール
+4.気合
+5.ミラーサイトの情報
+Gentoo Distfile Mirrors – Gentoo Linux
+https://www.gentoo.org/downloads/mirrors/
+
+・マシン
+富士通 PRIMERGY TX100 S3p - wiki@nothing
+http://wiki.nothing.sh/page/%C9%D9%BB%CE%C4%CC%20PRIMERGY%20TX100%20S3p
+
+-構成
+https://gist.github.com/neplus/1b73df58dc425278c91b
+
+-SSD
+# parted /dev/sdc
+GNU Parted 2.3
+/dev/sdc を使用
+GNU Parted へようこそ！ コマンド一覧を見るには 'help' と入力してください。
+(parted) p
+モデル: ATA Crucial_CT256M55 (scsi)
+ディスク /dev/sdc: 256GB
+
+
+・資料とか
+autounmaskはもう使うな - Emacs ひきこもり生活
+http://d.hatena.ne.jp/meech/20120221/1329839829
+
+ML110 G7 でサーバ構築 I - Saneyan Notes
+http://saneyan.hatenablog.com/entry/2013/01/16/025453
+
+美しい日本語さんはTwitterを使っています: "C86のらぼちっく；げーと新刊「ノーラボ・ノーライフ」寄稿分のGentooをインストールする記事を公開します。この記事の通りに進めるとchroot直後にトラブります。emerge-webrsyncすると進めるのでよろしくお願いします https://t.co/XOPvuO1dfa"
+https://twitter.com/kamiya344/status/519127819075334145
+
+dm-crypt/システム全体の暗号化 - ArchWiki
+http://archlinuxjp.kusakata.com/wiki/Dm-crypt/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%85%A8%E4%BD%93%E3%81%AE%E6%9A%97%E5%8F%B7%E5%8C%96#LVM_on_LUKS
+
+Gentoo Linuxをインストールする
+http://note.kurodigi.com/gentoo-install/
+
+・目的
+1.暗号化！暗号化きもちいい！！！ecrytpfsのファイル名文字数制限糞だけどdm-cryptかわいい！！！
+2.今使ってる環境に飽きた
+3.Xeon買ったらコンパイルおじさんになるんだ…かいてきなかいはつかんきょうでうはうはするんだ…
+4.HDD容量足りなくなった・・・てか、SSD余ってるジャン しかもEFI関係ないからめっちゃ資料が安定してる！！
+5.LFSいれるしかない？時間なくなくない？
+6.gentooでいいか・・・あれっでも仕事してたら時間なくね
+7.あきらめよ…
+8.突然の　無職(社内)
+9.#gentooinstallbattle 、そろそろやるか
+
+・懸念
+1.時間
+2.根気
+3.LVM使うと毎回マウントできなくなって死ぬ(ディスク容量満タンのまま負荷をかけると
+  そのまま息を引き取り何もできなくなる)
+4.chromeつかえないとつらい(google-chrome)
+→chromium使うのは現実的じゃないのでなしの方向で
+
+-Gentoo Packages /package/www-client/google-chrome
+https://packages.gentoo.org/package/www-client/google-chrome
+41.0.2272.101_p1
+
+-ubuntu向けのパッケージバージョン
+バージョン 41.0.2272.118 (64-bit)
+
+だいたい追随できてる・・・？いける・・・！
+5.bash消したい　bashに依存しない社会が良かった fishfishしたい人生だった
+
+・todo(藤堂さんではない)
+1.今までメモった手順書の修正
+2.LUKS周りの勉強
+3.こんぱいるちしき
+
+
+修正したgentooインストール手順書(途中)
+============================================================================================================
+wget /* this page */
+
+sudo -i
+tmux
+apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk
+script
+date
+ 
+df -hT
+ls /dev/sd*
+gdisk /dev/sdc
+parted -l
+parted /dev/sdc print
+ 
+;;rm -rf /mnt/gentoo
+ 
+mkdir /mnt/gentoo
+mkdir /mnt/gentoo/boot
+mkdir -p /mnt/gentoo/boot/
+mkdir -p /mnt/gentoo/home/
+mkfs.ext2 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+mount -t ext2 /dev/sda1 /mnt/gentoo/boot
+mount -t ext4 /dev/sda3 /mnt/gentoo/home/
+mount -t ext4 /dev/sda2 /mnt/gentoo/
+cd /mnt/gentoo/
+time wget http://ftp.iij.ad.jp/pub/linux/gentoo/snapshots/portage-latest.tar.bz2
+time wget http://ftp.iij.ad.jp/pub/linux/gentoo/releases/amd64/autobuilds/current-stage3-amd64/stage3-amd64-20150326.tar.bz2
+ 
+
+//整合性をcatとかで確認
+wget http://ftp.iij.ad.jp/pub/linux/gentoo/snapshots/portage-latest.tar.bz2.md5sum
+wget http://ftp.iij.ad.jp/pub/linux/gentoo/releases/amd64/autobuilds/current-stage3-amd64/install-amd64-minimal-20150326.iso.DIGESTS
+cat portage-latest.tar.bz2.md5sum
+cat install-amd64-minimal-20150326.iso.DIGESTS
+md5sum portage-*
+sha512sum stage3-amd64-*
+whirlpoolsum stage3-amd64-*
+ 
+;; 	rm stage3-*.tar.bz2* portage-latest.tar.bz2*
+
+time tar xvjpf stage3-*.tar.bz2;time tar xvjf portage-latest.tar.bz2 -C /mnt/gentoo/usr
+
+
+
+;;ややこしくなるので後で修正↓
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/portage/make.conf -O /mnt/gentoo/etc/portage/make.conf
+cat /mnt/gentoo/etc/portage/make.conf
+ 
+mount -t proc none /mnt/gentoo/proc
+mount --rbind /dev /mnt/gentoo/dev
+mount --rbind /sys /mnt/gentoo/sys
+cp -L /etc/resolv.conf /mnt/gentoo/etc
+ 
+chroot /mnt/gentoo /bin/bash
+export PS1="(chroot) $PS1"
+env-update
+source /etc/profile
+time emerge --sync
+eselect profile list
+ 
+eselect profile set 1
+eselect profile list
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+time emerge -1tav linux-headers linux-firmware gentoo-sources vim emacs iptables pciutils syslog-ng fcron dhcpcd sudo zsh openssh man-pages-ja btrfs-progs f2fs-tools grub:2 efibootmgr dosfstools ufw gptfdisk tmux ntp --autounmask-write
+ 
+;; distcc  vim 
+ 
+dispatch-conf
+ 
+//  :u
+ 
+time emerge -1tav linux-headers linux-firmware gentoo-sources emacs vim iptables pciutils syslog-ng fcron dhcpcd sudo zsh openssh man-pages-ja btrfs-progs f2fs-tools grub:2 efibootmgr dosfstools ufw gptfdisk tmux ntp
+============================================================================================================================================================
+ntpdate -s ntp.nict.jp
+hwclock -w
+date
+ 
+ 
+//linux kernelのinstall終わってから別のシェルを開いてchrootに入らずに実行
+//以前（今日）作成した.configを移す
+cat /home/ubuntu/.config > /mnt/gentoo/usr/src/linux/.config
+ls -l /usr/src/linux
+cd /usr/src/linux
+ 
+make localyesconfig
+make menuconfig
+ 
+time make && time make modules_install
+;;time make firmware_install
+
+cp arch/x86_64/boot/bzImage /boot/kernel
+ls /boot/kernel*
+ 
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/locale.gen -O /etc/locale.gen
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/env.d/02locale -O /etc/env.d/02locale
+locale-gen
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/fstab -O /etc/fstab
+cat /etc/fstab
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/conf.d/net -O /etc/conf.d/net
+cat -w /etc/conf.d/net
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/conf.d/keymaps -O /etc/conf.d/keymaps
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/ssh/sshd_config -O /etc/ssh/sshd_config
+nano -w /etc/conf.d/hostname
+ 
+rc-update add syslog-ng default
+rc-update add fcron default
+rc-update add dhcpcd default
+rc-update add ufw boot
+rc-update add sshd default
+cd /etc/init.d 
+ln -s net.lo net.eth0 
+rc-update add net.eth0 default 
+ 
+cd /
+passwd
+useradd -m -g users -G users,audio,video,wheel -s /bin/zsh heartbleed
+passwd heartbleed
+wget https://raw.githubusercontent.com/neplus/ML110G7/master/etc/sudoers -O /etc/sudoers
+visudo
+ 
+env-update
+source /etc/profile
+ 
+;;grubはubuntuにまかせて楽しちゃう？
+grep -v rootfs /proc/mounts > /etc/mtab
+ls /etc/grub.d/
+chmod -x /etc/grub.d/{20_linux_xen,30_os-prober,40_custom,41_custom}
+grub2-mkconfig -o /boot/grub/grub.cfg
+mount /boot
+grub2-install /dev/sda
+ 
+ 
+exit
+ 
+exit
+cat /mnt/gentoo/usr/src/linux/.config > /home/ubuntu/.config
+umount -l /mnt/gentoo{/dev{/shm,/pts},/sys,/boot,/proc,/}
+ 
+ 
+exit
+ 
+poweroff
