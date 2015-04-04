@@ -77,11 +77,12 @@ https://packages.gentoo.org/package/www-client/google-chrome
 
 修正したgentooインストール手順書(途中)
 ============================================================================================================
-wget /* this page */
+wget https://raw.githubusercontent.com/neplus/gentoo/master/gentooinstallbattle
 
 sudo -i
+
+apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk cryptsetup lvm2 tmux
 tmux
-apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk cryptsetup lvm2
 script -a ~/gentooinstall_`date +%Y%d%m%H%M%S`.log
 
 ;;install痕、作業ログを少しだけ読みやすくする
