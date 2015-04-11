@@ -100,7 +100,7 @@ mkdir -p /mnt/gentoo/home/
 
 
 ls /dev/sd*
-gdisk /dev/sdc
+gdisk /dev/sda
 //
 1.o
 y
@@ -112,7 +112,7 @@ y
 7.w
 y
  
-gdisk /dev/sdc
+gdisk /dev/sda
 //
 1.n
 2.2
@@ -123,13 +123,14 @@ gdisk /dev/sdc
 y 
 
 ;;
-cryptsetup open --type plain /dev/sdc2 container
+cryptsetup open --type plain /dev/sda2 container
 fdisk -l
 dd if=/dev/zero of=/dev/mapper/container
 
 ;;
-cryptsetup luksFormat /dev/sdc2
-cryptsetup open --type luks /dev/sdc2 lvm
+cryptsetup luksFormat /dev/sda2
+cryptsetup open --type luks /dev/sda2 lvm
+cryptsetup -c aes-xts-plain64:sha512 -s 512 luksFormat /dev/sda2
 pvcreate /dev/mapper/lvm
 vgcreate MyStorage /dev/mapper/lvm
 lvcreate -L 20G MyStorage -n rootvol
@@ -139,8 +140,8 @@ mkfs.ext4 /dev/mapper/MyStorage-homevol
 
 mount /dev/MyStorage/rootvol /mnt/gentoo
 mount /dev/MyStorage/homevol /mnt/gentoo/home
-mkfs.ext4 /dev/sdc1
-mount -t ext4 /dev/sdc1 /mnt/gentoo/boot
+mkfs.ext4 /dev/sda1
+mount -t ext4 /dev/sda1 /mnt/gentoo/boot
 
 mkinitcpio の設定[編集]
 encrypt と lvm2 フックを mkinitcpio.conf 内の filesystems の前に追加します:
@@ -153,7 +154,7 @@ cryptdevice=/dev/partition:MyStorage root=/dev/mapper/MyStorage-rootvol
 
 
 parted -l
-parted /dev/sdc print
+parted /dev/sda print
 
 
 
