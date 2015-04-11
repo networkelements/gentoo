@@ -85,7 +85,7 @@ apt-get install libdigest-whirlpool-perl g++ ntpdate gdisk cryptsetup lvm2 tmux
 tmux
 script -a ~/gentooinstall_`date +%Y%d%m%H%M%S`.log
 
-;;install痕、作業ログを少しだけ読みやすくする
+;;install後、作業ログを少しだけ読みやすくする
 ;; col -bx <gentooinstall_`date +%Y%d%m%H%M%S`.log> `date +%Y%d%m%H%M%S`.txt
 
 date
@@ -118,7 +118,7 @@ gdisk /dev/sda
 2.2
 3.Enter
 4.Enter
-5.8302
+5.8e00
 6.w
 y 
 
@@ -127,10 +127,9 @@ cryptsetup open --type plain /dev/sda2 container
 fdisk -l
 dd if=/dev/zero of=/dev/mapper/container
 
-;;
-cryptsetup luksFormat /dev/sda2
-cryptsetup open --type luks /dev/sda2 lvm
-cryptsetup -c aes-xts-plain64:sha512 -s 512 luksFormat /dev/sda2
+;;cryptsetup luksFormat /dev/sda2
+cryptsetup -c aes-xts-plain64:sha512 -s 512 luksFormat /dev/sda2 -y
+cryptsetup luksOpen /dev/sda2 lvm
 pvcreate /dev/mapper/lvm
 vgcreate MyStorage /dev/mapper/lvm
 lvcreate -L 20G MyStorage -n rootvol
