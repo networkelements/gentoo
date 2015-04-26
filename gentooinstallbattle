@@ -126,16 +126,23 @@ y
 cryptsetup open --type plain /dev/sda2 container
 fdisk -l
 dd if=/dev/zero of=/dev/mapper/container
+;;
+
+;;shred -v -z /dev/sda2
+;;shred -n 3 -v /dev/sda2
+;;dd if=/dev/zero of=/dev/sda2
+
 
 ;;cryptsetup luksFormat /dev/sda2
 cryptsetup -c aes-xts-plain64:sha512 -s 512 luksFormat /dev/sda2 -y
 cryptsetup luksOpen /dev/sda2 lvm
+ls /dev/mapper
 pvcreate /dev/mapper/lvm
 vgcreate MyStorage /dev/mapper/lvm
 lvcreate -L 20G MyStorage -n rootvol
 lvcreate -l +100%FREE MyStorage -n homevol
-mkfs.ext4 /dev/mapper/MyStorage-rootvol
-mkfs.ext4 /dev/mapper/MyStorage-homevol
+mkfs.f2fs /dev/mapper/MyStorage-rootvol
+mkfs.f2fs /dev/mapper/MyStorage-homevol
 
 mount /dev/MyStorage/rootvol /mnt/gentoo
 mount /dev/MyStorage/homevol /mnt/gentoo/home
